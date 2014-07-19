@@ -1,5 +1,7 @@
 fs = require('fs')
 app = require('express')()
+React = require('react')
+db = require('./db')
 
 env = process.env.NODE_ENV || 'development'
 
@@ -19,7 +21,7 @@ app.get '/js/lib.js', (req, res, next) ->
 app.get '/', (req, res, next) ->
   res.set('content-type', 'text/html; charset=utf-8');
   res.write('<!doctype html><html class="borderbox"><link rel="stylesheet" href="/bower_components/typo.css/typo.css" /><link rel="stylesheet" href="/components/lepture-yue.css/yue.css" /><link rel="stylesheet" href="/css/style.css" /><div id="sign-up-root-wrapper" class="container">')
-  #res.write(React.renderComponentToString(require('./components/frontpage')()))
+  res.write(React.renderComponentToString(require('./components/frontpage')()))
   res.end('</div><script src="/js/lib.js"></script><script src="/js/bundle.js"></script></html>')
 
 app.use(require('express/node_modules/serve-static')(__dirname + '/public'))
