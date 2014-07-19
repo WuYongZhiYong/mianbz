@@ -24,6 +24,8 @@
     "iced-coffee-script": "^1.7.1-f",
     "iced-runtime": "^1.0.1",
     "icsify": "^0.6.0",
+    "level-sublevel": "^5.2.0",
+    "level-ttl": "^0.6.1",
     "leveldown": "^0.10.2",
     "levelup": "^0.18.5",
     "passport": "^0.2.0",
