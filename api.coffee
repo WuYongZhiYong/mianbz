@@ -13,11 +13,9 @@ router.post '/user',
       password: req.body.password
       email: req.body.email
     await db.get user.username, defer err, obj
-    console.log err
-    console.log err
     if (err.message.indexOf('not found') > -1)
+      console.log 'register, %j', user
       await db.put user.username, user, ef next, defer obj
-      console.log(obj)
       res.json(success: true)
     else
       res.json(success: false)
