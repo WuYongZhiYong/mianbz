@@ -1,0 +1,40 @@
+/* style for mian.bz */
+
+html, body {
+  height: 100%;
+  width: 100%;
+}
+
+#root-wrapper, .component-wrapper, #content {
+  height: 100%;
+}
+
+.container {
+  width: 1000px;
+  margin: 0 auto;
+}
+
+.editor-wrapper {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.editor-wrapper.hide {
+  display: none;
+}
+
+.editor-wrapper .container {
+  position: relative;
+  height: 100%;
+}
+
+#editor {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 100%;
+  width: 1000px;
+}
