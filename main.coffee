@@ -36,7 +36,7 @@ app.get '*', (req, res, next) ->
     res.statusCode(404)
     return res.end('custom domain is currently not supported')
   username = req.headers.host.replace(reTld, '')
-  title = req.url.split('?')[0].split('/')[0].split('/').join(' ').trim()
+  title = req.url.split('?')[0].split('/').join(' ').trim()
   res.set('content-type', 'text/html; charset=utf-8');
   res.write('<!doctype html><html class="borderbox"><link rel="stylesheet" href="/bower_components/typo.css/typo.css" /><link rel="stylesheet" href="/components/lepture-yue.css/yue.css" /><link rel="stylesheet" href="/css/style.css" /><div id="root-wrapper" class="container">')
   res.write(React.renderComponentToString(require('./components/entry')(content: '#' + title)))
