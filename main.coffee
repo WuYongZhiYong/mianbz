@@ -34,7 +34,7 @@ app.get '/', (req, res, next) ->
 app.get '*', (req, res, next) ->
   reTld = /(\.mian\.bz|\.mbz\.io)(:\d+)?$/i
   if not req.headers.host?.match(reTld)
-    res.statusCode(404)
+    res.statusCode = 404
     return res.end('custom domain is currently not supported')
   username = req.headers.host.replace(reTld, '')
   title = req.url.split('?')[0].split('/').join(' ').trim()
