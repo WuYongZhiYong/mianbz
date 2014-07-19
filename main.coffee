@@ -9,7 +9,7 @@ app.get '/js/bundle.js', (req, res, next) ->
   res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
   require('browserify')()
     .add('./bundle.coffee')
-    .external(['react', 'react-tag-mixin'])
+    .external(['react', 'react-tag-mixin', 'superagent', 'marked'])
     .transform(require('icsify'))
     .bundle(debug: env == 'development', bundleExternal: false).pipe(res)
 
