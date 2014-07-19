@@ -5,7 +5,7 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "build": "./node_modules/.bin/browserify -d -r react -r react-tag-mixin -r superagent -r marked> public/js/lib.debug.js && ./node_modules/.bin/browserify -r react -r react-tag-mixin -r superagent -r marked | uglifyjs > public/js/lib.js"
+    "build": "./node_modules/.bin/browserify -d -r react -r react-tag-mixin -r superagent -r marked> public/js/lib.debug.js && NODE_ENV=production ./node_modules/.bin/browserify -r react -r react-tag-mixin -r superagent -r marked | uglifyjs > public/js/lib.js"
   },
   "repository": {
     "type": "git",
