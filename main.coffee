@@ -5,6 +5,7 @@ db = require('./db')
 
 env = process.env.NODE_ENV || 'development'
 
+app.use require('morgan')()
 app.get '/js/bundle.js', (req, res, next) ->
   res.setHeader('Content-Type', 'application/javascript; charset=utf-8');
   require('browserify')()
