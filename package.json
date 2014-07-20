@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/WuYongZhiYong/mianbz",
   "dependencies": {
+    "bcryptjs": "^2.0.1",
     "body-parser": "^1.4.3",
+    "debug": "^1.0.4",
     "errto": "^0.2.1",
     "express": "^4.6.1",
     "iced-coffee-script": "^1.7.1-f",

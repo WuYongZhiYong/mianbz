@@ -5,7 +5,7 @@ db = require('./db')
 
 env = process.env.NODE_ENV || 'development'
 
-app.set 'trust proxy', true
+app.enable 'trust proxy'
 app.disabled 'x-powered-by'
 app.use require('morgan')()
 app.get '/js/bundle.js', (req, res, next) ->

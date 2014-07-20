@@ -1,11 +1,25 @@
 React = require('react')
 TagMixin = require('react-tag-mixin')
 superagent = require('superagent')
+bcrypt = require('bcryptjs')
 
 module.exports = React.createClass
   mixins: [TagMixin]
   onSubmit: (ev) ->
     ev.preventDefault()
+    if not (@state.username and @state.password and @state.email)
+      return alert '請填寫必要信息'
+    await bcrypt.genSalt 6, defer err, salt
+    return alert err.message if err
+    console.log 'salt:', salt
+    await bcrypt.hash @state.password, salt, defer err, hash
+    @state.password = hash
+    return alert err.message if err
+    console.log 'hash:', hash
+    obj =
+      username: @state.username
+      password: hash
+      email: @state.email
     await superagent.post('/api/user')
       .type('form')
       .send(@state)
@@ -14,11 +28,16 @@ module.exports = React.createClass
     if (r.status == 200)
       alert(r.text)
   onSignin: (ev) ->
-    console.log @state
     ev.preventDefault()
+    console.log @state
+    await superagent.get('/api/salt?username='+@state.susername).end defer r
+    console.log r
+    await bcrypt.hash @state.spassword, r.body.salt, defer err, password
+    console.log err
+    console.log password
     await superagent.post('/api/signin')
       .type('form')
-      .send(@state)
+      .send({username: @state.susername, password})
       .end defer r
     console.log r
     if (r.status == 200)
