@@ -1,0 +1,9 @@
+{
+  "oauth2clients": {
+    "browser": {
+      "id": "browser",
+      "name": "browser",
+      "key": "browser-client"
+    }
+  }
+}
