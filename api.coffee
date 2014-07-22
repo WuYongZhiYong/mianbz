@@ -35,9 +35,44 @@ router.get '/salt', (req, res, next) ->
   debug 'obj from db: %j', obj
   return res.json salt: obj.salt
 
+
+passport = require('passport')
+oauth2orize = require('oauth2orize')
+server = oauth2orize.createServer()
+server.exchange oauth2orize.exchange.password (client, username, password, scope, done) ->
+  err = new Error 'invalid credential'
+  err.status = 400
+  err.code = 'invalid_request'
+  await db.userDb.get username, defer err, obj
+  return done err if err or not obj.password
+  debug 'obj from db: %j', obj
+  if obj.password is sha512(password)
+    token = sha512(Math.random().toString())
+    console.log token
+    await db.tokenDb.put token, obj, ttl: 24*60*60*1000, ef done
+    done null, token
+  else
+    done err
+
+router.use passport.initialize()
+passport.use new (require('passport-oauth2-client-password').Strategy) (clientId, clientSecret, done) ->
+  if clientId is 'browser' and clientSecret is 'browser-client'
+    done null, id: 'browser', name: 'browser'
+  else
+    err = new Error 'invalid client'
+    err.code = 'unauthorized_client'
+    err.status = 403
+    done err
+
 router.post '/signin', (req, res, next) ->
   await db.userDb.get req.body.username, defer err, obj
   return res.json {success: false} if err or not obj.password
   debug 'obj from db: %j', obj
   success = obj.password is sha512(req.body.password)
   res.json {success}
+
+router.post '/token',
+  passport.authenticate 'oauth2-client-password', session: false, failWithError: true
+  server.token()
+
+router.use server.errorHandler()

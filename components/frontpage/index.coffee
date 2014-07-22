@@ -35,9 +35,14 @@ module.exports = React.createClass
     await bcrypt.hash @state.spassword, r.body.salt, defer err, password
     console.log err
     console.log password
-    await superagent.post('/api/signin')
+    await superagent.post('/api/token')
       .type('form')
-      .send({username: @state.susername, password})
+      .send
+        username: @state.susername
+        password: password
+        client_id: 'browser'
+        client_secret: 'browser-client'
+        grant_type: 'password'
       .end defer r
     console.log r
     if (r.status == 200)
