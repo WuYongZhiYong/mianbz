@@ -23,6 +23,8 @@
     "debug": "^1.0.4",
     "errto": "^0.2.1",
     "express": "^4.6.1",
+    "fn-arity": "0.0.1",
+    "htmlxify": "^0.3.0",
     "iced-coffee-script": "^1.7.1-f",
     "iced-runtime": "^1.0.1",
     "icsify": "^0.6.0",
@@ -38,9 +40,10 @@
     "passport-oauth2-client-password": "^0.1.1",
     "react": "^0.10.0",
     "react-tag-mixin": "^0.1.0",
-    "superagent": "^0.18.2"
+    "superagent": "^0.18.2",
+    "watchify": "^1.0.0"
   },
   "devDependencies": {
-    "browserify": "^4.2.1"
+    "browserify": "^5.0.0"
   }
 }

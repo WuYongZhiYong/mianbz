@@ -1,18 +1,22 @@
 React = require('react')
-TagMixin = require('react-tag-mixin')
 superagent = require('superagent')
+ef = require('errto')
 bcrypt = require('bcryptjs')
+arity = require('fn-arity')
+arity2 = arity.bind(null, 2)
 
 module.exports = React.createClass
-  mixins: [TagMixin]
   onSubmit: (ev) ->
+    efn = ef.bind null, (err) ->
+      alert(err.message) if err
+
     ev.preventDefault()
     if not (@state.username and @state.password and @state.email)
       return alert '請填寫必要信息'
-    await bcrypt.genSalt 6, defer err, salt
+    await bcrypt.genSalt 6, efn defer salt
     return alert err.message if err
     console.log 'salt:', salt
-    await bcrypt.hash @state.password, salt, defer err, hash
+    await bcrypt.hash @state.password, salt, efn defer hash
     @state.password = hash
     return alert err.message if err
     console.log 'hash:', hash
@@ -23,16 +27,19 @@ module.exports = React.createClass
     await superagent.post('/api/user')
       .type('form')
       .send(@state)
-      .end defer r
+      .end arity2 efn defer r
     console.log r
-    if (r.status == 200)
+    if r.status == 200
       alert(r.text)
   onSignin: (ev) ->
+    efn = ef.bind null, (err) ->
+      alert(err.message) if err
+
     ev.preventDefault()
     console.log @state
-    await superagent.get('/api/salt?username='+@state.susername).end defer r
+    await superagent.get('/api/salt?username='+@state.susername).end arity2 efn defer r
     console.log r
-    await bcrypt.hash @state.spassword, r.body.salt, defer err, password
+    await bcrypt.hash @state.spassword, r.body.salt, efn defer password
     console.log err
     console.log password
     await superagent.post('/api/token')
@@ -43,9 +50,9 @@ module.exports = React.createClass
         client_id: 'browser'
         client_secret: 'browser-client'
         grant_type: 'password'
-      .end defer r
+      .end arity2 efn defer r
     console.log r
-    if (r.status == 200)
+    if r.status == 200
       alert(r.text)
   changeUsername: (ev) ->
     @setState({username: ev.target.value})
@@ -57,30 +64,4 @@ module.exports = React.createClass
     @setState({susername: ev.target.value})
   changeSigninPassword: (ev) ->
     @setState({spassword: ev.target.value})
-  render: ->
-    @div '#signup.component-wrapper.container',
-      @header '面壁者 MianBiZhe.com'
-      @form onSubmit: @onSubmit,
-        '註冊'
-        @label null,
-          @label '用戶名：'
-          @input name: 'username', onChange: @changeUsername
-          @span null, '.mian.bz'
-        @label null,
-          @label '密碼'
-          @input name: 'password', onChange: @changePassword
-        @label null,
-          @label '郵箱'
-          @input name: 'email', onChange: @changeEmail
-        @button type: 'submit', '註冊'
-      @aside null,
-        '登入'
-        @label null,
-        @form onSubmit: @onSignin,
-          @label null,
-            @label '用戶名'
-            @input name: 'username', onChange: @changeSigninUsername
-          @label null,
-            @label '密碼'
-            @input name: 'password', onChange: @changeSigninPassword
-          @button type: 'submit', '登入'
+  render: require('./tpl.htmlx')

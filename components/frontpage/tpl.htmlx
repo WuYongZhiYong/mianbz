@@ -1,0 +1,36 @@
+return 'htmlx below',
+<div id="singup" className="component-wrapper container">
+  <header>
+    面壁者 MianBiZhe.com
+  </header>
+  <form onSubmit={this.onSubmit}>
+    <h1>注册</h1>
+    <div>
+      <label>用户名</label>
+      <input type="text" name="username" onChange={this.changeUsername}/>
+      <span>.mian.bz</span>
+    </div>
+    <div>
+      <label>密碼</label>
+      <input type="text" name="password" onChange={this.changePassword}/>
+    </div>
+    <div>
+      <label>邮箱</label>
+      <input type="text" name="email" onChange={this.changeEmail}/>
+    </div>
+    <button type="submit">注册</button>
+  </form>
+  <aside>
+    <form onSubmit={this.onSignin}>
+      <div>
+        <label>用户名</label>
+        <input type="text" name="username" onChange={this.changeSigninUsername}/>
+      </div>
+      <div>
+        <label>密碼</label>
+        <input type="text" name="password" onChange={this.changeSigninPassword}/>
+      </div>
+      <button type="submit">登入</button>
+    </form>
+  </aside>
+</div>

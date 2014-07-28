@@ -21,8 +21,22 @@ html, body {
   width: 100%;
   height: 100%;
 }
-
-.editor-wrapper.hide {
+.component-wrapper {
+  position: relative;
+}
+.btn {
+  display: block;
+  background: #fff;
+  border: 2px #000 solid;
+  padding: 6px 10px;
+  position: relative;
+}
+.save {
+  position: absolute;
+  top: 0;
+  right: 0px;
+}
+.hide {
   display: none;
 }
 
@@ -44,3 +58,4 @@ html, body {
 #signup form>label {
   display: block;
 }
+

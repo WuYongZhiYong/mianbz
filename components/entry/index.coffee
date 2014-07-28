@@ -9,8 +9,11 @@ module.exports = React.createClass
   getInitialState: ->
     content: @props.content
     hideEditor: true
+    showSaveButton: false
   contentChanged: (ev) ->
-    @setState(content: @refs.editor.getDOMNode().value)
+    content = @refs.editor.getDOMNode().value
+    showSaveButton = content isnt @props.content
+    @setState({content, showSaveButton})
   hideEditor: ->
     @setState(hideEditor: yes)
   showEditor: ->
@@ -31,3 +34,5 @@ module.exports = React.createClass
             ref: 'editor',
             className: 'typo yue'
             defaultValue: @props.content
+      @a '.btn.save' + (if @state.showSaveButton then '' else '.hide'),
+        'Save'

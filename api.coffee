@@ -63,12 +63,21 @@ passport.use new (require('passport-oauth2-client-password').Strategy) (clientId
     err.code = 'unauthorized_client'
     err.status = 403
     done err
+passport.use new (require('passport-http-bearer').Strategy) (token, done) ->
+  await db.tokenDb.get token, defer err, obj
+  console.log err
+  done null, obj
 
 router.post '/signin', (req, res, next) ->
   await db.userDb.get req.body.username, defer err, obj
   return res.json {success: false} if err or not obj.password
   debug 'obj from db: %j', obj
   success = obj.password is sha512(req.body.password)
+  if success
+    token = sha512(Math.random().toString())
+    console.log token
+    await db.tokenDb.put token, obj, ttl: 24*60*60*1000, ef next
+    res.cookie('mbzac', token, domain: '.mbz.io', maxAge: 12*60*60*1000)
   res.json {success}
 
 router.post '/token',
