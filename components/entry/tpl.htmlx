@@ -1,0 +1,24 @@
+var marked = require('marked');
+var cx = require('react/lib/cx.js');
+return 'htmlx below',
+<div className="component-wrapper">
+  <div
+    id="component"
+    className="typo yue"
+    onMouseEnter={this.showEditor}
+    dangerouslySetInnerHTML={{__html: marked(state.content)}}>
+  </div>
+  <div className={ cx({"editor-wrapper":1, hide: state.hideEditor}) }>
+    <div className="container">
+      <textarea
+        id="editor"
+        className="typo yue"
+        onMouseLeave={this.hideEditor}
+        onChange={this.contentChanged}
+        ref="editor"
+        defaultValue={props.content}>
+      </textarea>
+    </div>
+  </div>
+  <a className={ cx({btn:1, save:1, hide: !state.showSaveButton}) }>Save</a>
+</div>

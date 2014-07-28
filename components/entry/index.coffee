@@ -18,21 +18,4 @@ module.exports = React.createClass
     @setState(hideEditor: yes)
   showEditor: ->
     @setState(hideEditor: no)
-  render: ->
-    @div '.component-wrapper',
-      @div
-        id: 'content'
-        className: 'typo yue',
-        onMouseEnter: @showEditor
-        dangerouslySetInnerHTML: __html: marked(@state.content)
-      @div className: 'editor-wrapper ' + (if @state.hideEditor then 'hide' else ''),
-        @div '.container',
-          @textarea
-            id: 'editor',
-            onMouseLeave: @hideEditor,
-            onChange: @contentChanged,
-            ref: 'editor',
-            className: 'typo yue'
-            defaultValue: @props.content
-      @a '.btn.save' + (if @state.showSaveButton then '' else '.hide'),
-        'Save'
+  render: require('./tpl.htmlx')

@@ -6,6 +6,7 @@ browserify = require('browserify')
 watchify = require('watchify')
 htmlxify = require('htmlxify')
 ef = require('errto')
+extend = require('extend')
 
 env = process.env.NODE_ENV || 'development'
 
@@ -16,7 +17,7 @@ app.get '/js/bundle.js', (req, res, next) ->
   res.setHeader('Content-Type', 'application/javascript; charset=utf-8')
   cache = null
   if app.get('env') == 'development'
-    watchify(browserify({debug: true, cache: {}, packageCache: {}, fullPaths: true}))
+    watchify(browserify(extend {debug: true}, watchify.args))
       .transform(require('icsify'))
       .transform(htmlxify())
       .add('./bundle.coffee')
