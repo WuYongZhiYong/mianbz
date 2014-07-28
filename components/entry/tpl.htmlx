@@ -3,7 +3,7 @@ var cx = require('react/lib/cx.js');
 return 'htmlx below',
 <div className="component-wrapper">
   <div
-    id="component"
+    id="content"
     className="typo yue"
     onMouseEnter={this.showEditor}
     dangerouslySetInnerHTML={{__html: marked(state.content)}}>
