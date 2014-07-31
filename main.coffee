@@ -7,6 +7,10 @@ watchify = require('watchify')
 htmlxify = require('htmlxify')
 ef = require('errto')
 extend = require('extend')
+config = require('config')
+superagent = require('superagent')
+arity = require('fn-arity')
+arity2 = arity.bind(null, 2)
 
 env = process.env.NODE_ENV || 'development'
 
@@ -36,25 +40,28 @@ app.get '/js/bundle.js', (req, res, next) ->
 app.use(require('express/node_modules/serve-static')(__dirname + '/public'))
 
 app.use '/api', require('./api')
+app.use require('cookie-parser')()
 
 app.get '/', (req, res, next) ->
   if (req.headers.host not in ['www.mianbizhe.com', 'mianbizhe.com', 'mian.bz', 'www.mian.bz', 'mbz.io:2014'])
     return next()
   res.set('content-type', 'text/html; charset=utf-8')
-  res.write('<!doctype html><html class="borderbox"><link rel="stylesheet" href="/bower_components/typo.css/typo.css" /><link rel="stylesheet" href="/components/lepture-yue.css/yue.css" /><link rel="stylesheet" href="/css/style.css" /><div id="sign-up-root-wrapper" class="container">')
-  #res.write(React.renderComponentToString(require('./components/frontpage')()))
-  res.end('</div><script src="/js/bundle.js"></script></html>')
+  res.sendfile(__dirname+'/index.html')
 
 app.get '*', (req, res, next) ->
   reTld = /(\.mian\.bz|\.mbz\.io)(:\d+)?$/i
-  if not req.headers.host?.match(reTld)
+  if not req.headers.host?.match(reTld) or req.url.match(/^\/favicon\.ico/i)
     res.statusCode = 404
     return res.end('custom domain is currently not supported')
+  console.log (req.cookies)
   username = req.headers.host.replace(reTld, '')
-  title = req.url.split('?')[0].split('/').join(' ').trim()
-  res.set('content-type', 'text/html; charset=utf-8')
-  res.write('<!doctype html><html class="borderbox"><link rel="stylesheet" href="/bower_components/typo.css/typo.css" /><link rel="stylesheet" href="/components/lepture-yue.css/yue.css" /><link rel="stylesheet" href="/css/style.css" /><div id="root-wrapper" class="container">')
-  #res.write(React.renderComponentToString(require('./components/entry')(content: '#' + title)))
-  res.end('</div><script src="/js/bundle.js"></script></html>')
+  domain = username + '.mian.bz'
+  await superagent.get(config.backend + '/site?domain=' + domain)
+    .end arity2 defer err, r
+  return res.end('site not found') if r.error?.status == 404
+  console.log(err.stack) if err
+  console.log(JSON.stringify(err))
+  console.log(r)
+  res.sendfile(__dirname+'/entry.html')
 
 app.listen(process.env.PORT || 2014)

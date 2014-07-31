@@ -1,36 +1,50 @@
 return 'htmlx below',
-<div id="singup" className="component-wrapper container">
+<div id="singup" class="component-wrapper container">
   <header>
-    面壁者 MianBiZhe.com
+    <h1>面壁者 MianBiZhe.com</h1>
+    <p>歡迎光臨面壁者，本站的目的是給使用者一個乾淨的類 Wiki 知識整理工具，您可以在這裏記錄下自己的所學所感，當您認爲某頁資料整理完成的時候可以選擇和別人共享。目前本網站正處在開發測試的階段，您可以現在就註冊，跟隨網站的開發進度體驗網站功能一天天完善的過程。</p>
+    <p>汲取個人寫作獨立服務商先烈 <a href="http://chloerei.com/2013/09/17/writings-9-months-experience/" target="_blank">writings.io</a> 的教訓，本站不打算提供永久免費服務（因爲本站的目標是提供<em>永久</em>服務）。開發階段您可以免費使用全站功能，目前的計劃是正式上線後您可以繼續免費使用半年時間，而學生用戶可以免費使用至開始工作（不算實習）後的半年時間。別擔心，距網站正式上線還有很久：）</p>
   </header>
-  <form onSubmit={this.onSubmit}>
-    <h1>注册</h1>
-    <div>
-      <label>用户名</label>
-      <input type="text" name="username" onChange={this.changeUsername}/>
-      <span>.mian.bz</span>
+  <div class="pure-g">
+    <div class="pure-u-1 pure-u-md-3-5">
+      <form class="pure-form pure-form-stacked" onSubmit={this.onSubmit}>
+        <fieldset>
+          <legend>註冊</legend>
+          <div class="pure-control-group">
+            <label>用户名</label>
+            <div class="form-inlined">
+            <input type="text" name="username" onChange={this.changeUsername}/>
+            <span>.mian.bz</span>
+            </div>
+          </div>
+          <div class="pure-control-group">
+            <label>密碼</label>
+            <input type="text" name="password" onChange={this.changePassword}/>
+          </div>
+          <div class="pure-control-group">
+            <label>邮箱</label>
+            <input type="text" name="email" onChange={this.changeEmail}/>
+          </div>
+
+          <button class="pure-button" type="submit">注册</button>
+        </fieldset>
+      </form>
     </div>
-    <div>
-      <label>密碼</label>
-      <input type="text" name="password" onChange={this.changePassword}/>
-    </div>
-    <div>
-      <label>邮箱</label>
-      <input type="text" name="email" onChange={this.changeEmail}/>
-    </div>
-    <button type="submit">注册</button>
-  </form>
-  <aside>
-    <form onSubmit={this.onSignin}>
-      <div>
-        <label>用户名</label>
-        <input type="text" name="username" onChange={this.changeSigninUsername}/>
-      </div>
-      <div>
-        <label>密碼</label>
-        <input type="text" name="password" onChange={this.changeSigninPassword}/>
-      </div>
-      <button type="submit">登入</button>
-    </form>
-  </aside>
+    <aside class="pure-u-1 pure-u-md-2-5">
+      <form class="pure-form pure-form-stacked" onSubmit={this.onSignin}>
+        <fieldset>
+          <legend>登入</legend>
+          <div class="pure-control-group">
+            <label>用户名</label>
+            <input type="text" name="username" onChange={this.changeSigninUsername}/>
+          </div>
+          <div class="pure-control-group">
+            <label>密碼</label>
+            <input type="text" name="password" onChange={this.changeSigninPassword}/>
+          </div>
+          <button class="pure-button" type="submit">登入</button>
+        </fieldset>
+      </form>
+    </aside>
+  </div>
 </div>

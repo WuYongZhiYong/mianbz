@@ -59,3 +59,6 @@ html, body {
   display: block;
 }
 
+.pure-form .form-inlined input, .form-inlined span {
+  display: inline-block;
+}

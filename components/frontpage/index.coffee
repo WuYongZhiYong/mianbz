@@ -37,12 +37,12 @@ module.exports = React.createClass
 
     ev.preventDefault()
     console.log @state
-    await superagent.get('/api/salt?username='+@state.susername).end arity2 efn defer r
+    await superagent.get("/api/user/#{@state.susername}/salt").end arity2 efn defer r
     console.log r
+    return alert '用戶名或密碼錯誤' if not r.body?.salt?
     await bcrypt.hash @state.spassword, r.body.salt, efn defer password
-    console.log err
     console.log password
-    await superagent.post('/api/token')
+    await superagent.post('/api/signin')
       .type('form')
       .send
         username: @state.susername

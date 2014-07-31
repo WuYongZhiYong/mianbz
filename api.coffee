@@ -2,10 +2,15 @@ router = require('express')()
 bodyParser = require('body-parser')
 db = require('./db')
 ef = require('errto')
+arity = require('fn-arity')
+arity2 = arity.bind(null, 2)
 bcrypt = require('bcryptjs')
 debug = require('debug')('api')
+config = require('config')
+apiPass = require('api-pass')
+superagent = require('superagent')
 
-module.exports = router;
+module.exports = router
 
 sha512 = (string) ->
   sha512sum = require('crypto').createHash('sha512')
@@ -16,25 +21,13 @@ router.use bodyParser.json()
 router.use bodyParser.urlencoded(extended: true)
 router.post '/user',
   (req, res, next) ->
-    user =
-      username: req.body.username
-      password: sha512(req.body.password)
-      email: req.body.email
-      salt: bcrypt.getSalt(req.body.password)
-    await db.userDb.get user.username, defer err, obj
-    if (err and err.message.indexOf('not found') > -1)
-      console.log 'register, %j', user
-      await db.userDb.put user.username, user, ef next, defer obj
-      res.json(success: true)
-    else
-      res.json(success: false)
+    req.apiPass = true
+    next()
 
-router.get '/salt', (req, res, next) ->
-  await db.userDb.get req.query.username, defer err, obj
-  return res.json {salt: '$2a$06$i7npE1FGF.c9tA4d1TG4Je'} if err or not obj.salt
-  debug 'obj from db: %j', obj
-  return res.json salt: obj.salt
-
+router.get '/user/:username/salt',
+  (req, res, next) ->
+    req.apiPass = true
+    next()
 
 passport = require('passport')
 oauth2orize = require('oauth2orize')
@@ -69,14 +62,19 @@ passport.use new (require('passport-http-bearer').Strategy) (token, done) ->
   done null, obj
 
 router.post '/signin', (req, res, next) ->
-  await db.userDb.get req.body.username, defer err, obj
-  return res.json {success: false} if err or not obj.password
-  debug 'obj from db: %j', obj
-  success = obj.password is sha512(req.body.password)
+  fail = () -> res.json {success: false}
+  efn = ef.bind(null, fail)
+  await superagent.get(config.backend + '/user?username=' + req.body.username)
+    .end arity2 efn defer r
+  debug 'obj from db: %j', r.body
+  user = r.body
+  console.log user.password
+  console.log sha512(req.body.password)
+  success = user.password is sha512(req.body.password)
   if success
     token = sha512(Math.random().toString())
     console.log token
-    await db.tokenDb.put token, obj, ttl: 24*60*60*1000, ef next
+    await db.tokenDb.put token, user, ttl: 24*60*60*1000, ef next
     res.cookie('mbzac', token, domain: '.mbz.io', maxAge: 12*60*60*1000)
   res.json {success}
 
@@ -84,4 +82,5 @@ router.post '/token',
   passport.authenticate 'oauth2-client-password', session: false, failWithError: true
   server.token()
 
+router.use apiPass(config.backend)
 router.use server.errorHandler()
